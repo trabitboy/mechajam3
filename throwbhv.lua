@@ -1,18 +1,21 @@
 
 
 function initThrow(go)
+        go.x=ply.x
+        go.y=ply.y
         go.vx=ply.lx 
         go.vy=ply.ly
         go.dx=ply.x+ply.lx
         go.dy=ply.y+ply.ly
         go.bhv=throwBhv
-
+        go.trackMe=nil
+        --TODO silly 
+      return true
 end
 
-throwInc=0.01
+throwInc=0.05
 
 function throwBhv(s)
-  --TODO stupid non grid impl
   s.x=s.x+s.vx*throwInc
   s.y=s.y+s.vy*throwInc
   
@@ -27,6 +30,7 @@ function throwBhv(s)
     s.y=s.dy
     s.z=4
     addMsg('dbg > dest reached')
+--    s.trackMe=nil
     s.bhv=bhvCrate
   end
   

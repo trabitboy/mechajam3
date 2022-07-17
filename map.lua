@@ -12,7 +12,7 @@ end
 --check if walkable (floor tile)
 function walkability(tx,ty)
 --  getGo(tx,ty)
-  tnum=curLvl.map[ty*curLvl.mw+tx]
+  tnum=curLvl.map[(ty-1)*curLvl.mw+tx]
   addMsg("walkability "..tnum)
   if tnum==1 then
       return true

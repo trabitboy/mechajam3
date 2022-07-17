@@ -16,11 +16,11 @@
 --    move from square to square and check collision
 --    stop on object or boundary of playfield 
 --BUG object dx dy step not working
---BUGwalkability check doesnt work
---SUSP render of map uses factor of 8 to jump row? should be mw=16?
 
 --TODO
+--screen capture of process picocad > blender > g3d (including patch)
 --drop zone
+--bill board ennemy
 --ennemy display >bill board side front
 --ennemy move
 --roasted chicken 
@@ -34,6 +34,9 @@
 --bonus chocolate: compile to browser (davidobot lovejs)
 
 --ability to jump on certain obstacles? (later levels)
+
+
+disableRepeat=false
 
 g3d = require "g3d"
 
@@ -140,9 +143,9 @@ end
 
 function love.draw()
   
-   tx=5
+--   tx=5
     ty=1
-    tz=0
+--    tz=0
     for j=1,curLvl.mh
     do
       for i=1,curLvl.mw
@@ -150,7 +153,7 @@ function love.draw()
 --        tnum=curLvl[8*j+i]
         --TODO map is 16 wide, display incorrect
 
-        tnum=curLvl.map[8*j+i]
+        tnum=curLvl.map[curLvl.mw*(j-1)+i]
         if tnum==1 then
           tarmac:setTranslation(i*8,j*8,ty)
 --          tarmac:setTranslation(i*8,j*8,tz)

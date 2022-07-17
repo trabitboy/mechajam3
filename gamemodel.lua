@@ -26,7 +26,8 @@ ply={
   
 --just for player so far  
 love.keypressed=function(k,s,r)
-  if(r==true)then 
+  --TODO seems repeat is off by default
+  if(r==true and disableRepeat==true)then 
     --square by square movement
     return
   end
@@ -54,7 +55,7 @@ positionPlayerAndCameraTarget=function()
 --  g3d.camera.target={ply.x*8+ply.lx*8,ply.y*8+ply.ly*8,2}
   g3d.camera.target={ply.x*8+math.cos(ply.angle)*8,ply.y*8+math.sin(ply.angle),2}
   g3d.camera.updateViewMatrix()
---  addMsg("ply x "..ply.x.." y "..ply.y)
+  addMsg("ply x "..ply.x.." y "..ply.y)
 end
 
 
@@ -69,20 +70,21 @@ movePlayerFromInput=function()
     if ply.command=='ACTION' then
       --if ply has a crate in arms, throw it
       if ply.holding~=nil then
-        --TODO throw in straight line
---        ply.holding.vx=ply.lx 
---        ply.holding.vy=ply.ly
-        success=initThrow(ply.holding,lx,ly)
+        addMsg("holding something ")
+        --throw in straight line
+        success=initThrow(ply.holding,ply.lx,ply.ly)
 --        ply.holding.bhv=throwBhv
         if success==true then
           ply.holding=nil
-          addMsg('throw')
+          addMsg('thrown, holding set to nil')
         else
           addMsg('cant throw')
         end
       --if ply has crate in front, lift it
       elseif canPickup(ply.x+ply.lx,ply.y+ply.ly) then
-        --TODO pickup , adjust coords also when ply moves
+        addMsg("not holding something, picking up")
+
+      --TODO pickup , adjust coords also when ply moves
         addMsg("pickupable")
         ply.holding=getGo(ply.x+ply.lx,ply.y+ply.ly)
         ply.holding.x=ply.x
@@ -95,7 +97,8 @@ movePlayerFromInput=function()
     elseif ply.command=='FW' then
       tx=ply.x+ply.lx
       ty=ply.y+ply.ly
-      success=checkMoveBoundaries(tx,ty) and walkability(tx,ty)
+      success=checkMoveBoundaries(tx,ty) and walkability(tx,ty) 
+      --TODO doesnt work and crashes near border
       if success==true then
         ply.dx=ply.x+ply.lx 
         ply.dy=ply.y+ply.ly
