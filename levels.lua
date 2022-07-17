@@ -1,3 +1,8 @@
+--mtdt
+walkableTiles={
+    1, --ground
+    3, --dropzone for crates
+}
 
 function createTestLvlGos()
   addMsg("tst lvl gos fac")
@@ -12,7 +17,7 @@ function createTestLvlGos()
   table.insert(ret,createCrate(7,8))
   table.insert(ret,createCrate(6,7))
   table.insert(ret,createCrate(7,6))
-  table.insert(ret,createBaddie(9,9))
+  table.insert(ret,createBaddie(9,9,1,0))
   
   addMsg("ret table "..tbllngth(ret))
   pprint(ret)
@@ -35,7 +40,7 @@ testLvl=
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-          1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+          1,1,1,1,1,1,3,3,3,1,1,1,1,1,1,1,
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

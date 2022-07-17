@@ -10,28 +10,30 @@
 --(cinematic advance)
 --cinematic moves (cinematic turn)
 --crate display
-
---WIP
 --crate mechanic
 --    move from square to square and check collision
 --    stop on object or boundary of playfield 
---BUG object dx dy step not working
+--screen capture of process picocad > blender > g3d (including patch)
+--mecha lifting object above head ( you see a bit of the object bottom)
+--bonus chocolate: compile to browser (davidobot lovejs)
+
+
+--WIP
+--ennemy move (needs to turn back)
+--drop zone
 
 --TODO
---screen capture of process picocad > blender > g3d (including patch)
---drop zone
+-- level complete: nice iso camera view so you see the robot cheering 
+-- and the crates launched in the sky
 --bill board ennemy
 --ennemy display >bill board side front
---ennemy move
 --roasted chicken 
 --gift crate (like xmas gift) different colors?
 --giggling aliens blocked by crates
 -- smoke collision effect?
 -- stunned baddie collectable?
 --giant rats
---mecha lifting object above head ( you see a bit of the object bottom)
 --alien/rats throwable when stun?
---bonus chocolate: compile to browser (davidobot lovejs)
 
 --ability to jump on certain obstacles? (later levels)
 
@@ -79,6 +81,12 @@ tarmac= g3d.newModel(
             "assets/tarmac/tritarmac1.obj"
             ,"assets/tarmac/tarmac1_tex.png"
       , {5,5,0}, {math.pi/2,0,0}, {4,4,4})
+    
+dropzone= g3d.newModel(
+            "assets/droptmp.obj"
+            ,"assets/droptmp_tex.png"
+      , {5,5,0}, {math.pi/2,0,0}, {4,4,4})
+    
     
 skyscraper=g3d.newModel(
       "assets/skyscraper/trisstex1.obj"
@@ -139,6 +147,9 @@ function love.update(dt)
     
      movePlayerFromInput()
     updateGos()
+    if checkVictory()==true then
+      addMsg('you won \\(^o^)/')
+    end
 end
 
 function love.draw()
@@ -160,14 +171,11 @@ function love.draw()
           tarmac:draw()
         elseif tnum==2 then
           skyscraper:setTranslation(i*8,j*8,ty)
---          tarmac:setTranslation(i*8,j*8,tz)
           skyscraper:draw()
+        elseif tnum==3 then
+          dropzone:setTranslation(i*8,j*8,ty)
+          dropzone:draw()
           
-  --        -- test render in go
-  ----        modelRep[buildingId]:setTranslation(i*8,ty-4,j*8)
-  ----        --rot should not be there
-  ----        modelRep[buildingId]:setRotation(math.pi,0,0)
-  ----        modelRep[buildingId]:draw()        
         end
       
         

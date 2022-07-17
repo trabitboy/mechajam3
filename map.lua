@@ -14,10 +14,13 @@ function walkability(tx,ty)
 --  getGo(tx,ty)
   tnum=curLvl.map[(ty-1)*curLvl.mw+tx]
   addMsg("walkability "..tnum)
-  if tnum==1 then
-      return true
-  else 
-    return false
+  
+  for i,n in ipairs(walkableTiles)
+  do
+      if n==tnum then return true end
   end
+  
+  
+  return false
   
 end

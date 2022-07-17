@@ -52,10 +52,9 @@ end
 positionPlayerAndCameraTarget=function()
     
   g3d.camera.position={ply.x*8,ply.y*8,2}
---  g3d.camera.target={ply.x*8+ply.lx*8,ply.y*8+ply.ly*8,2}
   g3d.camera.target={ply.x*8+math.cos(ply.angle)*8,ply.y*8+math.sin(ply.angle),2}
   g3d.camera.updateViewMatrix()
-  addMsg("ply x "..ply.x.." y "..ply.y)
+--  addMsg("ply x "..ply.x.." y "..ply.y)
 end
 
 
@@ -97,7 +96,7 @@ movePlayerFromInput=function()
     elseif ply.command=='FW' then
       tx=ply.x+ply.lx
       ty=ply.y+ply.ly
-      success=checkMoveBoundaries(tx,ty) and walkability(tx,ty) 
+      success=checkMoveBoundaries(tx,ty) and walkability(tx,ty) and getGo(tx,ty)==nil
       --TODO doesnt work and crashes near border
       if success==true then
         ply.dx=ply.x+ply.lx 
@@ -208,4 +207,27 @@ movePlayerFromInput=function()
   
   end
   
+end
+
+checkVictory=function()
+  --if there is a food crate on each dropzone tile,
+  --level is won!
+  for j=1,curLvl.mh 
+  do
+    for i=1,curLvl.mw 
+    do
+      potNum=curLvl.map[(j-1)*curLvl.mw+i]
+      if potNum==3 then
+        potCrate=getGo(i,j)
+        if potCrate==nil or potCrate.food~=true then 
+          --either no go at this spot or not food
+          return false
+        end
+      end
+    end
+  end
+  
+  --no dropzone was found without food,
+  --lvl is won
+  return true
 end

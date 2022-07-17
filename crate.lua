@@ -37,6 +37,7 @@ createCrate=function(x,y)
     ret.z=4
     ret.rx=0
     ret.ry=0
+    ret.food=true
     ret.rdr=rdrCrate
     ret.bhv=bhvCrate
     ret.liftable=true
