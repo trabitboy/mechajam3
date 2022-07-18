@@ -11,13 +11,15 @@ crateModel=  g3d.newModel(
 
 
 rdrCrate=function(s)
-  crateModel:setTranslation(s.x*8,s.y*8,s.z)
-  crateModel:setRotation(s.rx,s.ry,0)
-  crateModel:draw()
---  addMsg("rdr crate")
---  skyscraper:setTranslation(s.x*8,s.y*8,8)
-----          tarmac:setTranslation(i*8,j*8,tz)
---  skyscraper:draw()
+--  local myCrate=crateModel
+  
+--  local myCrate=wcrate
+  local myCrate=gift
+  
+  
+  myCrate:setTranslation(s.x*8,s.y*8,s.z)
+  myCrate:setRotation(s.rx,s.ry,0)
+  myCrate:draw()
 
   
 end
@@ -34,8 +36,8 @@ createCrate=function(x,y)
     local ret={}
     ret.x=x
     ret.y=y
-    ret.z=4
-    ret.rx=0
+    ret.z=8
+    ret.rx=math.pi/2
     ret.ry=0
     ret.food=true
     ret.rdr=rdrCrate

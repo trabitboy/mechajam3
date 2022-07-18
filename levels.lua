@@ -27,9 +27,15 @@ end
 testLvl=
   {
     gosFac=createTestLvlGos
-    ,  
+    ,
     mw=16,
     mh=16,
+--    skybox=starfieldbg,
+    skybox=blueskybg,
+--    ground=tarmac,
+    ground=bgrass,
+--    wall=skyscraper,
+    wall=tree,
     map={
           2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
           1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

@@ -21,8 +21,10 @@
 --WIP
 --ennemy move (needs to turn back)
 --drop zone
+--third person view, really far camera
 
 --TODO
+--try super small render to tex (200, 200) (300,300) for full pico 8 effect
 -- level complete: nice iso camera view so you see the robot cheering 
 -- and the crates launched in the sky
 --bill board ennemy
@@ -42,7 +44,7 @@ disableRepeat=false
 
 g3d = require "g3d"
 
-
+require('models')
 require('map')
 require('between')
 require('tlbutil')
@@ -77,41 +79,13 @@ function moveCameraAndTarget(dx,dy,dz)
     g3d.camera.target={g3d.camera.target[1]+dx,g3d.camera.target[2]+dy,g3d.camera.target[3]+dz}
 end
 
-tarmac= g3d.newModel(
-            "assets/tarmac/tritarmac1.obj"
-            ,"assets/tarmac/tarmac1_tex.png"
-      , {5,5,0}, {math.pi/2,0,0}, {4,4,4})
-    
-dropzone= g3d.newModel(
-            "assets/droptmp.obj"
-            ,"assets/droptmp_tex.png"
-      , {5,5,0}, {math.pi/2,0,0}, {4,4,4})
-    
-    
-skyscraper=g3d.newModel(
-      "assets/skyscraper/trisstex1.obj"
-    , "assets/skyscraper/sstex1_tex.png"
-      , {0,0,0}, {math.pi/2,0,0}, {8,8,8})
-    --not working
---    tile = g3d.newModel(
---            "assets/floortile.obj"
---            ,"assets/floortile_tex.png"
---      , {5,5,0}, {100,0,0}, {0.5,0.5,0.5})
-
-  testMech=g3d.newModel(
-      "assets/votoms/trimechatex2.obj"
-    , "assets/votoms/mymecha_tex.png"
-      , {0,0,5}, 
-      nil,
-      --{0,0,math.pi}, rot, model doesnt have correct orientation 
-      {3,3,3})
 
 
 
-
-local earth = g3d.newModel("assets/sphere.obj", "assets/earth.png", {4,0,0})
-local moon = g3d.newModel("assets/sphere.obj", "assets/moon.png", {4,5,0}, nil, 0.5)
-local background = g3d.newModel("assets/sphere.obj", "assets/starfield.png", nil, nil, 500)
+--earth = g3d.newModel("assets/sphere.obj", "assets/earth.png", {4,0,0})
+--moon = g3d.newModel("assets/sphere.obj", "assets/moon.png", {4,5,0}, nil, 0.5)
+--starfieldbg = g3d.newModel("assets/sphere.obj", "assets/starfield.png", nil, nil, 500)
+--blueskybg= g3d.newModel("assets/sphere.obj", "assets/bluebluesky.png", nil, nil, 500)
 local timer = 0
 
 --moveCamera(
@@ -154,6 +128,11 @@ end
 
 function love.draw()
   
+    love.graphics.clear(.8,.8,1.)
+  
+     grnd=curLvl.ground
+     wll=curLvl.wall
+  
 --   tx=5
     ty=1
 --    tz=0
@@ -166,12 +145,13 @@ function love.draw()
 
         tnum=curLvl.map[curLvl.mw*(j-1)+i]
         if tnum==1 then
-          tarmac:setTranslation(i*8,j*8,ty)
---          tarmac:setTranslation(i*8,j*8,tz)
-          tarmac:draw()
+          grnd:setTranslation(i*8,j*8,ty)
+          grnd:draw()
         elseif tnum==2 then
-          skyscraper:setTranslation(i*8,j*8,ty)
-          skyscraper:draw()
+          grnd:setTranslation(i*8,j*8,ty)
+          grnd:draw()
+          wll:setTranslation(i*8,j*8,ty+2)
+          wll:draw()
         elseif tnum==3 then
           dropzone:setTranslation(i*8,j*8,ty)
           dropzone:draw()
@@ -192,7 +172,7 @@ function love.draw()
     
     drawAxis()
     
-    background:draw()
+--    curLvl.skybox:draw()
     
 --    love.graphics.print("test")
     msgToCvs()
