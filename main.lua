@@ -16,25 +16,36 @@
 --screen capture of process picocad > blender > g3d (including patch)
 --mecha lifting object above head ( you see a bit of the object bottom)
 --bonus chocolate: compile to browser (davidobot lovejs)
+--drop zone
+--giggling aliens blocked by crates
+--up down step when moving
+--cockpit display
+--walk sound
+-- wait when baddie is thinking
+--ennemy move (needs to turn back)
+--ennemy turning >done
 
 
 --WIP
---ennemy move (needs to turn back)
---drop zone
---third person view, really far camera
+--ply damage when touching ennemy
+--thunder pixel effect
+-- bounce when baddie is moving
+-- smoke collision effect?
 
 --TODO
+-- target asset billboard included
+--billboard ennemy
+--ennemy display >bill board side front
+--giant rats
+--jump in the air briefly to better see level?
+--jumping flash style?
+--third person view, really far camera
 --try super small render to tex (200, 200) (300,300) for full pico 8 effect
 -- level complete: nice iso camera view so you see the robot cheering 
 -- and the crates launched in the sky
---bill board ennemy
---ennemy display >bill board side front
 --roasted chicken 
 --gift crate (like xmas gift) different colors?
---giggling aliens blocked by crates
--- smoke collision effect?
 -- stunned baddie collectable?
---giant rats
 --alien/rats throwable when stun?
 
 --ability to jump on certain obstacles? (later levels)
@@ -44,6 +55,8 @@ disableRepeat=false
 
 g3d = require "g3d"
 
+require('lookuptable.lut')
+require('sfx')
 require('models')
 require('map')
 require('between')
@@ -59,7 +72,22 @@ require('gos')
 pprint=require('pprint')
 
 
-initLvl(1)
+      playSD(sdStep)
+
+--love.window.setMode(800,600)
+
+cvs=love.graphics.newCanvas(
+  800,600
+--  600,600
+  )
+
+ww,wh=love.graphics.getDimensions()
+addMsg(" window "..ww.." "..wh)
+
+tstBillRot=0
+--BillRotTable={0,0,tstBillRot}
+
+initLvl(2)
 
 function setCameraLeft()
     g3d.camera.target={g3d.camera.position[1]+1.,g3d.camera.position[2],g3d.camera.position[3]}
@@ -127,7 +155,8 @@ function love.update(dt)
 end
 
 function love.draw()
-  
+    
+    love.graphics.setCanvas({cvs,depth=true})
     love.graphics.clear(.8,.8,1.)
   
      grnd=curLvl.ground
@@ -164,18 +193,31 @@ function love.draw()
   
     renderGos()
   
-    earth:draw()
-    moon:draw()
-    tarmac:draw()
-    skyscraper:draw()
-    testMech:draw()
+--    earth:draw()
+--    moon:draw()
+--    tarmac:draw()
+--    skyscraper:draw()
+--    testMech:draw()
     
     drawAxis()
     
 --    curLvl.skybox:draw()
     
 --    love.graphics.print("test")
+    tstBillRot=tstBillRot+0.1
+    rot=billboardtest:setRotation(0,0,tstBillRot)
+    billboardtest:draw()
+    
+    
+    love.graphics.draw(cockpit,0,0,0,5,5)
     msgToCvs()
+    
+    --end rtotex
+    love.graphics.setCanvas()
+    love.graphics.draw(cvs)
+    
+    
+    
 end
 
 function love.mousemoved(x,y, dx,dy)

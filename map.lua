@@ -13,7 +13,7 @@ end
 function walkability(tx,ty)
 --  getGo(tx,ty)
   tnum=curLvl.map[(ty-1)*curLvl.mw+tx]
-  addMsg("walkability "..tnum)
+--  addMsg("walkability "..tnum)
   
   for i,n in ipairs(walkableTiles)
   do

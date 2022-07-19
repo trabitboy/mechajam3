@@ -1,4 +1,4 @@
-maxMsg=10
+maxMsg=30
 
 mx=0
 my=0

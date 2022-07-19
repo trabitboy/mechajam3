@@ -1,4 +1,5 @@
-
+cockpit=love.graphics.newImage("assets/cockpit.png")
+cockpit:setFilter("linear", "nearest")
 
 earth = g3d.newModel("assets/sphere.obj", "assets/earth.png", {4,0,0})
 moon = g3d.newModel("assets/sphere.obj", "assets/moon.png", {4,5,0}, nil, 0.5)
@@ -17,6 +18,12 @@ tarmac= g3d.newModel(
             "assets/tarmac/tritarmac1.obj"
             ,"assets/tarmac/tarmac1_tex.png"
       , {5,5,0}, {math.pi/2,0,0}, {4,4,4})
+    
+billboardtest= g3d.newModel(
+            "assets/tarmac/tritarmac1.obj"
+            ,"assets/tarmac/tarmac1_tex.png"
+      , {60,60,10}, {0,0,1.1}, {4,4,4})
+
     
 dropzone= g3d.newModel(
             "assets/droptmp.obj"

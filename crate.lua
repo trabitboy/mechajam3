@@ -13,8 +13,8 @@ crateModel=  g3d.newModel(
 rdrCrate=function(s)
 --  local myCrate=crateModel
   
---  local myCrate=wcrate
-  local myCrate=gift
+  local myCrate=wcrate
+--  local myCrate=gift
   
   
   myCrate:setTranslation(s.x*8,s.y*8,s.z)

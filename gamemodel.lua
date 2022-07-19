@@ -1,8 +1,15 @@
 
 stepinc=0.1
 
+yfootLut=createMirrorXLut(
+--  "lookups/footheight.png"
+  "lookups/footheight10steps.png"
+  )
+
+
+
 ply={
-    
+    zoff=0.,
     x=8.,
     y=8.,
     --FOR LOGIC MOVE NOT DISPLAY
@@ -51,8 +58,10 @@ end
   --angle
 positionPlayerAndCameraTarget=function()
     
-  g3d.camera.position={ply.x*8,ply.y*8,2}
-  g3d.camera.target={ply.x*8+math.cos(ply.angle)*8,ply.y*8+math.sin(ply.angle),2}
+  bouncefactor=6
+    
+  g3d.camera.position={ply.x*8,ply.y*8,2+ply.zoff/bouncefactor}
+  g3d.camera.target={ply.x*8+math.cos(ply.angle)*8,ply.y*8+math.sin(ply.angle),2+ply.zoff/bouncefactor}
   g3d.camera.updateViewMatrix()
 --  addMsg("ply x "..ply.x.." y "..ply.y)
 end
@@ -102,6 +111,7 @@ movePlayerFromInput=function()
         ply.dx=ply.x+ply.lx 
         ply.dy=ply.y+ply.ly
         
+        countSteps=0
         ply.state='WAIT_STEP'
       else
         addMsg("out of bound")
@@ -193,6 +203,10 @@ movePlayerFromInput=function()
     --normally new command is not read until finished
     ply.x=ply.x+ply.lx*stepinc 
     ply.y=ply.y+ply.ly*stepinc
+    countSteps=countSteps+1 --just to calculate necessary size of lut
+    ply.zoff=yfootLut[countSteps]
+    addMsg("zoff "..ply.zoff)
+    
     if (ply.x<=ply.dx+stepinc 
       and ply.dx-stepinc<= ply.x)
       and
@@ -200,6 +214,9 @@ movePlayerFromInput=function()
       and ply.dy-stepinc<= ply.y) then
       ply.x=ply.dx
       ply.y=ply.dy
+      
+      playSD(sdStep)
+      addMsg(' steps '..countSteps)
       ply.state='COMMAND_READY'
     end
     positionPlayerAndCameraTarget()
