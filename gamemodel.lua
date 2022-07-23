@@ -6,7 +6,11 @@ yfootLut=createMirrorXLut(
   "lookups/footheight10steps.png"
   )
 
-
+damageLut=createXLut(
+  "lookups/footheight.png"
+--  "lookups/quickradiation.png"
+  )
+pprint(damageLut)
 
 ply={
     zoff=0.,
@@ -28,7 +32,8 @@ ply={
           --we store source and dest
     command=nil,-- buffered keypress command to exec,
     state='COMMAND_READY',
-    holding=nil --reference to the go being held (crates)
+    holding=nil, --reference to the go being held (crates)
+    hp=3
   }
   
 --just for player so far  
@@ -66,6 +71,25 @@ positionPlayerAndCameraTarget=function()
 --  addMsg("ply x "..ply.x.." y "..ply.y)
 end
 
+function damagePlayer()
+  addMsg('DAMAGE')
+  ply.hp=ply.hp-1
+  FSDMG()
+  if ply.hp==0 then
+      gameOver=true
+  end
+--  ply.damageCounter=31
+end
+
+--TODO not working
+function damageFx()
+--  if ply.damageCounter~=nil and ply.damageCounter>0 then
+--    ply.damageCounter=ply.damageCounter-1
+--    ply.zoff=damageLut[ply.damageCounter]
+--    addMsg("dmg ply zoff "..ply.zoff)
+--    positionPlayerAndCameraTarget()
+--  end
+end
 
 --states are
 -- COMMAND_READY
@@ -105,6 +129,14 @@ movePlayerFromInput=function()
     elseif ply.command=='FW' then
       tx=ply.x+ply.lx
       ty=ply.y+ply.ly
+      
+      potBad=getGo(tx,ty)
+      if potBad~=nil and potBad.damage==true then
+        damagePlayer()
+        ply.command='NONE'
+        return
+      end
+      
       success=checkMoveBoundaries(tx,ty) and walkability(tx,ty) and getGo(tx,ty)==nil
       --TODO doesnt work and crashes near border
       if success==true then

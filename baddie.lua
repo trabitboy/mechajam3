@@ -1,33 +1,35 @@
 
-  baddie=g3d.newModel(
---       "assets/xcube.obj"
---        ,"assets/debugtex.png"
---  , {0,0,0},
---  nil,
---  {8,8,8}
---  )
+  baddie=
+    evilDrill;
+  
+  
+--  g3d.newModel(
     
-      "assets/votoms/trimechatex2.obj"
-    , "assets/votoms/mymecha_tex.png"
-      , {0,0,5}, 
---      nil,
-      {math.pi/2,0,math.pi}, 
---      rot, model doesnt have correct orientation 
-      {1,1,1})
+    
+--      "assets/votoms/trimechatex2.obj"
+--    , "assets/votoms/mymecha_tex.png"
+--      , {0,0,5}, 
+----      nil,
+--      {math.pi/2,0,math.pi}, 
+----      rot, model doesnt have correct orientation 
+--      {1,1,1}
+      
+      
+--      )
 
 
 rdrBad=function(b)
   --TODO place holder
 --  addMsg('rdr bad')
-  baddie:setTranslation(b.x*8,b.y*8,2)
+  baddie:setTranslation(b.x*8,b.y*8,3)
   if b.vx==1 then 
-    baddie:setRotation(math.pi/2,0,-math.pi/2)
+    baddie:setRotation(math.pi/2,0+tstBillRot,-math.pi/2)
   elseif b.vx==-1 then 
-    baddie:setRotation(math.pi/2,0,math.pi/2)
+    baddie:setRotation(math.pi/2,0+tstBillRot,math.pi/2)
   elseif b.vy==1 then 
-    baddie:setRotation(math.pi/2,0,0)
+    baddie:setRotation(math.pi/2,0+tstBillRot,0)
   elseif b.vy==-1 then 
-    baddie:setRotation(math.pi/2,0,math.pi)
+    baddie:setRotation(math.pi/2,0+tstBillRot,math.pi)
   
   end
   baddie:draw()
@@ -48,6 +50,16 @@ bhvBad=function(b)
   elseif b.state=='THINKING' then
     tx=b.x+b.vx
     ty=b.y+b.vy
+    
+    if tx==ply.x and ty==ply.y then
+      
+      --damage player
+      playSD(sdStep)
+      damagePlayer()
+      b.state='WAITING'
+      return
+    end
+    
     if checkMoveBoundaries(tx,ty) and walkability(tx,ty)==true and getGo(tx,ty)==nil then
       --we can go there !
 --      addMsg('moving to '..tx..' '..ty)
@@ -79,6 +91,7 @@ createBaddie= function(x,y,vx,vy)
   b={}
   b.x=x
   b.y=y
+  b.damage=true
   b.vx=vx
   b.vy=vy
   b.bhv=bhvBad

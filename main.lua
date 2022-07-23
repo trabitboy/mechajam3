@@ -1,4 +1,5 @@
 
+lvlNum=1
 
 
 --DONE
@@ -27,6 +28,9 @@
 
 
 --WIP
+--BUG preseting lx ly on init lvl doesnt work >>> workaruond
+--BUG after damage, crash on ply move
+--BUG when ennemy turning, goes through ply
 --ply damage when touching ennemy
 --thunder pixel effect
 -- bounce when baddie is moving
@@ -52,12 +56,15 @@
 
 
 disableRepeat=false
+pprint=require('pprint')
 
 g3d = require "g3d"
+
 
 require('lookuptable.lut')
 require('sfx')
 require('models')
+require('fsfx')
 require('map')
 require('between')
 require('tlbutil')
@@ -69,7 +76,6 @@ require('baddie')
 require('crate')
 require('throwbhv')
 require('gos')
-pprint=require('pprint')
 
 
       playSD(sdStep)
@@ -87,7 +93,7 @@ addMsg(" window "..ww.." "..wh)
 tstBillRot=0
 --BillRotTable={0,0,tstBillRot}
 
-initLvl(2)
+initLvl(lvlNum)
 
 function setCameraLeft()
     g3d.camera.target={g3d.camera.position[1]+1.,g3d.camera.position[2],g3d.camera.position[3]}
@@ -140,17 +146,24 @@ end
 
 function love.update(dt)
     timer = timer + dt
-    moon:setTranslation(math.cos(timer)*5 + 4, math.sin(timer)*5, 0)
-    moon:setRotation(0, 0, timer - math.pi/2)
+--    moon:setTranslation(math.cos(timer)*5 + 4, math.sin(timer)*5, 0)
+--    moon:setRotation(0, 0, timer - math.pi/2)
 --    g3d.camera.firstPersonMovement(dt)
     if love.keyboard.isDown "escape" then
         love.event.push "quit"
     end
-    
-     movePlayerFromInput()
-    updateGos()
+  
+    updFSFX()
+  
+    --is this used?
+    damageFx()
     if checkVictory()==true then
       addMsg('you won \\(^o^)/')
+    elseif gameOver==true then
+      addMsg('you lose (O_o°)')
+    else
+     movePlayerFromInput()
+     updateGos()
     end
 end
 
@@ -184,6 +197,8 @@ function love.draw()
         elseif tnum==3 then
           dropzone:setTranslation(i*8,j*8,ty)
           dropzone:draw()
+          tgtbill:setTranslation(i*8,j*8,10)
+          tgtbill:draw()
           
         end
       
@@ -199,17 +214,45 @@ function love.draw()
 --    skyscraper:draw()
 --    testMech:draw()
     
-    drawAxis()
+--    drawAxis()
     
 --    curLvl.skybox:draw()
     
 --    love.graphics.print("test")
     tstBillRot=tstBillRot+0.1
-    rot=billboardtest:setRotation(0,0,tstBillRot)
-    billboardtest:draw()
-    
+--    rot=billboardtest:setRotation(0,0,tstBillRot)
+    tgtbill:setRotation(math.pi,0,tstBillRot)
+--    billboardtest:draw()
+--    tgtbill:draw()
     
     love.graphics.draw(cockpit,0,0,0,5,5)
+    
+    rdrFSFX()
+    
+    --BAD EXPENSIVE SHOULD BE FLAG ^^
+    if checkVictory()==true then
+        love.graphics.rectangle('fill',200,200,400,200)
+        love.graphics.setColor(0.,0.,0.)
+        love.graphics.print('WON',270,250,0,10,10)
+        love.graphics.setColor(1.,1.,1.)
+        
+        if love.keyboard.isDown('space') then
+          if lvlNum<tbllngth(levels) then
+            lvlNum=lvlNum+1
+            initLvl(lvlNum)
+          end
+        end
+    elseif gameOver==true then
+        love.graphics.setColor(1.,0.,0.)      
+        love.graphics.rectangle('fill',100,200,600,200)
+        love.graphics.setColor(0.,0.,0.)
+        love.graphics.print('RETRY',200,250,0,10,10)
+        love.graphics.setColor(1.,1.,1.)      
+        if love.keyboard.isDown('space') then
+          initLvl(lvlNum)
+        end
+    end
+    
     msgToCvs()
     
     --end rtotex

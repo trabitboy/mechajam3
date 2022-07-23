@@ -1,6 +1,20 @@
 cockpit=love.graphics.newImage("assets/cockpit.png")
 cockpit:setFilter("linear", "nearest")
 
+screenDamage=love.graphics.newImage("assets/screendamage.png")
+screenDamage:setFilter("linear", "nearest")
+
+evilDrill=g3d.newModel(
+      "assets/evildrill.obj"
+    , "assets/evildrill_tex.png"
+      , {0,0,5
+        }, 
+      nil,
+      --{0,0,math.pi}, rot, model doesnt have correct orientation 
+      {3,3,3})
+
+
+
 earth = g3d.newModel("assets/sphere.obj", "assets/earth.png", {4,0,0})
 moon = g3d.newModel("assets/sphere.obj", "assets/moon.png", {4,5,0}, nil, 0.5)
 starfieldbg = g3d.newModel("assets/sphere.obj", "assets/starfield.png", nil, nil, 500)
@@ -19,9 +33,16 @@ tarmac= g3d.newModel(
             ,"assets/tarmac/tarmac1_tex.png"
       , {5,5,0}, {math.pi/2,0,0}, {4,4,4})
     
+    
+    
 billboardtest= g3d.newModel(
             "assets/tarmac/tritarmac1.obj"
             ,"assets/tarmac/tarmac1_tex.png"
+      , {60,60,10}, {0,0,1.1}, {4,4,4})
+
+tgtbill= g3d.newModel(
+            "assets/tgtbill.obj"
+            ,"assets/tgtbill_tex.png"
       , {60,60,10}, {0,0,1.1}, {4,4,4})
 
     
